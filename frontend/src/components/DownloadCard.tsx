@@ -21,16 +21,18 @@ import { base64URLEncode, ellipsis, formatSize, formatSpeedMiB, mapProcessStatus
 import ResolutionBadge from './ResolutionBadge'
 import ClearIcon from '@mui/icons-material/Clear'
 import StopCircleIcon from '@mui/icons-material/StopCircle'
+import CancelIcon from '@mui/icons-material/Cancel';
 import OpenInBrowserIcon from '@mui/icons-material/OpenInBrowser'
 import SaveAltIcon from '@mui/icons-material/SaveAlt'
 
 type Props = {
   download: RPCResult
+  onKill: () => void
   onStop: () => void
   onCopy: () => void
 }
 
-const DownloadCard: React.FC<Props> = ({ download, onStop, onCopy }) => {
+const DownloadCard: React.FC<Props> = ({ download, onKill, onStop, onCopy }) => {
   const serverAddr = useAtomValue(serverURL)
 
   const isCompleted = useCallback(
@@ -118,13 +120,18 @@ const DownloadCard: React.FC<Props> = ({ download, onStop, onCopy }) => {
             </IconButton>
           </Tooltip>
           :
-          <Tooltip title="Stop this download">
-            <IconButton
-              onClick={onStop}
-            >
-              <StopCircleIcon />
-            </IconButton>
-          </Tooltip>
+          <>
+            <Tooltip title="Kill this download">
+              <IconButton onClick={onKill}>
+                <CancelIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Stop this download">
+              <IconButton onClick={onStop}>
+                <StopCircleIcon />
+              </IconButton>
+            </Tooltip>
+          </>
         }
         {isCompleted() &&
           <>

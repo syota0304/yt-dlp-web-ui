@@ -26,6 +26,7 @@ import { useRPC } from '../hooks/useRPC'
 import { ProcessStatus, RPCResult } from '../types'
 import { base64URLEncode, formatSize, formatSpeedMiB } from "../utils"
 import { useAtomValue } from 'jotai'
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const columns = [
   {
@@ -133,9 +134,13 @@ const DownloadsTableView: React.FC = () => {
     window.open(`${serverAddr}/filebrowser/d/${encoded}?token=${localStorage.getItem('token')}`)
   }
 
-  const stop = (r: RPCResult) => r.progress.process_status === ProcessStatus.COMPLETED
+  const kill = (r: RPCResult) => r.progress.process_status === ProcessStatus.COMPLETED
     ? client.clear(r.id)
     : client.kill(r.id)
+
+  const stop = (r: RPCResult) => r.progress.process_status === ProcessStatus.COMPLETED
+    ? client.clear(r.id)
+    : client.stop(r.id)
 
 
   function rowContent(_index: number, download: RPCResult) {
@@ -173,11 +178,18 @@ const DownloadsTableView: React.FC = () => {
           <ButtonGroup>
             <IconButton
               size="small"
-              onClick={() => stop(download)}
+              onClick={() => kill(download)}
             >
-              {download.progress.percentage === '-1' ? <DeleteIcon /> : <StopCircleIcon />}
-
+              {download.progress.percentage === '-1' ? <DeleteIcon /> : <CancelIcon />}
             </IconButton>
+            {download.progress.percentage !== '-1' &&
+              <IconButton
+                size="small"
+                onClick={() => stop(download)}
+              >
+                <StopCircleIcon />
+              </IconButton>
+            }
             {download.progress.percentage === '-1' &&
               <>
                 <IconButton

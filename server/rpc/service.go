@@ -149,6 +149,28 @@ func (s *Service) Kill(args string, killed *string) error {
 	return nil
 }
 
+func (s *Service) Stop(args string, killed *string) error {
+	slog.Info("Trying killing process with id", slog.String("id", args))
+
+	proc, err := s.db.Get(args)
+	if err != nil {
+		return err
+	}
+
+	if proc == nil {
+		return errors.New("nil process")
+	}
+
+	if err := proc.Stop(); err != nil {
+		slog.Info("failed stop process", slog.String("id", proc.Id), slog.Any("err", err))
+		return err
+	}
+
+	slog.Info("succesfully stop process", slog.String("id", proc.Id))
+
+	return nil
+}
+
 // KillAll kills all process unconditionally and removes them from
 // the memory db
 func (s *Service) KillAll(args NoArgs, killed *string) error {

@@ -18,9 +18,13 @@ const DownloadsGridView: React.FC = () => {
 
   const [isPending, startTransition] = useTransition()
 
-  const stop = async (r: RPCResult) => r.progress.process_status === ProcessStatus.COMPLETED
+  const kill = async (r: RPCResult) => r.progress.process_status === ProcessStatus.COMPLETED
     ? await client.clear(r.id)
     : await client.kill(r.id)
+
+  const stop = async (r: RPCResult) => r.progress.process_status === ProcessStatus.COMPLETED
+    ? await client.clear(r.id)
+    : await client.stop(r.id)
 
   return (
     <>
@@ -31,6 +35,9 @@ const DownloadsGridView: React.FC = () => {
             <Grid2 size={{ xs: 4, sm: 8, md: 6, xl: 4 }} key={download.id}>
               <DownloadCard
                 download={download}
+                onKill={() => startTransition(async () => {
+                  await kill(download)
+                })}
                 onStop={() => startTransition(async () => {
                   await stop(download)
                 })}

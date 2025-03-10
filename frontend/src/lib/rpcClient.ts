@@ -136,6 +136,13 @@ export class RPCClient {
     })
   }
 
+  public stop(id: string) {
+    return this.sendHTTP({
+      method: 'Service.Stop',
+      params: [id],
+    })
+  }
+
   public clear(id: string) {
     return this.sendHTTP({
       method: 'Service.Clear',

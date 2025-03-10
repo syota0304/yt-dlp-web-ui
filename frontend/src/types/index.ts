@@ -1,6 +1,7 @@
 export type RPCMethods =
   | "Service.Exec"
   | "Service.Kill"
+  | "Service.Stop"
   | "Service.Clear"
   | "Service.Running"
   | "Service.KillAll"

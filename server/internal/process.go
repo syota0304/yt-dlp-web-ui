@@ -259,7 +259,26 @@ func (p *Process) Complete() {
 	memDbEvents <- p
 }
 
-// Kill a process and remove it from the memory
+func (p *Process) Stop() error {
+	defer func() {
+		p.Progress.Status = StatusCompleted
+	}()
+
+	if p.proc == nil {
+		return errors.New("*os.Process not set")
+	}
+
+	pgid, err := syscall.Getpgid(p.proc.Pid)
+	if err != nil {
+		return err
+	}
+	if err := syscall.Kill(-pgid, syscall.SIGINT); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (p *Process) Kill() error {
 	defer func() {
 		p.Progress.Status = StatusCompleted
