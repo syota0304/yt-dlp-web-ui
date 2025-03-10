@@ -17,7 +17,6 @@ import {
   MenuItem,
   MenuList,
   Paper,
-  SpeedDial,
   SpeedDialAction,
   SpeedDialIcon,
   Typography
@@ -42,6 +41,7 @@ import { ffetch } from '../lib/httpClient'
 import { DirectoryEntry } from '../types'
 import { base64URLEncode, formatSize } from '../utils'
 import { useAtomValue } from 'jotai'
+import SpeedDial from "../components/SpeedDial"
 
 export default function Downloaded() {
   const [menuPos, setMenuPos] = useState({ x: 0, y: 0 })

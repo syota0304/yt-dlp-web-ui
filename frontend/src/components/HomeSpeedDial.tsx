@@ -5,7 +5,6 @@ import FolderZipIcon from '@mui/icons-material/FolderZip'
 import FormatListBulleted from '@mui/icons-material/FormatListBulleted'
 import ViewAgendaIcon from '@mui/icons-material/ViewAgenda'
 import {
-  SpeedDial,
   SpeedDialAction,
   SpeedDialIcon
 } from '@mui/material'
@@ -13,6 +12,7 @@ import { useAtom, useAtomValue } from 'jotai'
 import { listViewState, serverURL } from '../atoms/settings'
 import { useI18n } from '../hooks/useI18n'
 import { useRPC } from '../hooks/useRPC'
+import SpeedDial from "./SpeedDial"
 
 type Props = {
   onDownloadOpen: () => void

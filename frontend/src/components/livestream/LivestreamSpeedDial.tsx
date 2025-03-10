@@ -1,7 +1,8 @@
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
-import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material'
+import { SpeedDialAction, SpeedDialIcon } from '@mui/material'
 import { useI18n } from '../../hooks/useI18n'
+import SpeedDial from "../SpeedDial"
 
 type Props = {
   onOpen: () => void
