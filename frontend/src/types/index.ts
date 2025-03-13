@@ -14,6 +14,7 @@ export type RPCMethods =
   | "Service.ProgressLivestream"
   | "Service.KillLivestream"
   | "Service.KillAllLivestream"
+  | "Service.ClearCompleted"
 
 export type RPCRequest = {
   method: RPCMethods
