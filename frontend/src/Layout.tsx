@@ -4,6 +4,7 @@ import CloudDownloadIcon from '@mui/icons-material/CloudDownload'
 import Dashboard from '@mui/icons-material/Dashboard'
 import LiveTvIcon from '@mui/icons-material/LiveTv'
 import Menu from '@mui/icons-material/Menu'
+import DownloadIcon from '@mui/icons-material/Download'
 import SettingsIcon from '@mui/icons-material/Settings'
 import TerminalIcon from '@mui/icons-material/Terminal'
 import UpdateIcon from '@mui/icons-material/Update'
@@ -19,7 +20,7 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import { grey } from '@mui/material/colors'
 import { useAtomValue } from 'jotai'
-import { useMemo, useState } from 'react'
+import { Suspense, useMemo, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { settingsState } from './atoms/settings'
 import AppBar from './components/AppBar'
@@ -31,11 +32,19 @@ import ThemeToggler from './components/ThemeToggler'
 import { useI18n } from './hooks/useI18n'
 import Toaster from './providers/ToasterProvider'
 import { getAccentValue } from './utils'
+import DownloadDialog from "./components/DownloadDialog";
+import { useSetAtom } from "jotai/index";
+import { loadingAtom } from "./atoms/ui";
+import { useToast } from "./hooks/toast";
 
 export default function Layout() {
   const [open, setOpen] = useState(false)
 
   const settings = useAtomValue(settingsState)
+
+  const [openDownload, setOpenDownload] = useState(false)
+  const setIsLoading = useSetAtom(loadingAtom)
+  const { pushMessage } = useToast()
 
   const mode = settings.theme
   const theme = useMemo(() =>
@@ -85,6 +94,14 @@ export default function Layout() {
             >
               {settings.appTitle}
             </Typography>
+            <IconButton
+              edge="end"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={() => setOpenDownload(true)}
+            >
+              <DownloadIcon />
+            </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -211,6 +228,20 @@ export default function Layout() {
       </Box>
       <Footer />
       <Toaster />
+      <Suspense>
+        <DownloadDialog
+          open={openDownload}
+          onClose={() => {
+            setOpenDownload(false)
+            setIsLoading(true)
+          }}
+          onDownloadStart={(url) => {
+            pushMessage(`Requested ${url}`, 'info')
+            setOpenDownload(false)
+            setIsLoading(true)
+          }}
+        />
+      </Suspense>
     </ThemeProvider>
   )
 }
