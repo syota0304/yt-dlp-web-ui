@@ -32,26 +32,34 @@ const Footer: React.FC = () => {
       <Toolbar sx={{
         paddingBottom: 2,
         fontSize: 14,
-        display: 'flex', gap: 1, justifyContent: 'space-between'
+        display: 'flex',
+        gap: 1,
+        justifyContent: 'space-between',
+        overflow: 'auto',
       }}>
-        <Suspense fallback={<CircularProgress size={15} />}>
-          <VersionIndicator />
-        </Suspense>
-        <div style={{ display: 'flex', gap: 4, 'alignItems': 'center' }}>
+        <div style={{ display: 'flex', gap: 8, 'alignItems': 'center' }}>
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            flexWrap: 'wrap',
-            marginRight: 'px',
-            gap: 3,
+            gap: 3
           }}>
             <DownloadIcon />
-            <span>
+            <span style={{
+              whiteSpace: 'nowrap'
+            }}>
               {formatSpeedMiB(totalDownloadSpeed)}
             </span>
-            <Divider orientation="vertical" flexItem />
+          </div>
+          <Divider orientation="vertical" flexItem />
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 3
+          }}>
             <SettingsEthernet />
-            <span>
+            <span style={{
+              whiteSpace: 'nowrap'
+            }}>
               {isConnected ? settings.serverAddr : i18n.t('notConnectedText')}
             </span>
           </div>
@@ -60,6 +68,9 @@ const Footer: React.FC = () => {
             <FreeSpaceIndicator />
           </Suspense>
         </div>
+        <Suspense fallback={<CircularProgress size={15} />}>
+          <VersionIndicator />
+        </Suspense>
       </Toolbar>
     </AppBar>
   )

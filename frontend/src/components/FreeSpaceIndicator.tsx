@@ -10,11 +10,12 @@ const FreeSpaceIndicator = () => {
     <div style={{
       display: 'flex',
       alignItems: 'center',
-      flexWrap: 'wrap',
       gap: 3
     }}>
       <StorageIcon />
-      <span>
+      <span style={{
+        whiteSpace: 'nowrap'
+      }}>
         {formatSize(freeSpace)}
       </span>
     </div>
